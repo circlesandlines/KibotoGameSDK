@@ -1,45 +1,3 @@
-/*
-
-	This is the Kiboto game client SDK.
-	===================================
-
-	Either use it with the supplied bot message queue, or
-	use your own and supply the callbacks
-
-	> USAGE:
-
-		...
-
-		botMessages = new KibotoBotMessages();
-		game = new KibotoGame(hostname, port, 123, 000, "bob");
-		game.init_session();
-
-		...
-
-		// somewhere in the game loop
-		game.event({...}, function (httpcode, text, statustext) {
-
-				// you can use the kiboto message queue,
-				// or spin your own
-				// or modify game state right here (although
-				// I advise using a message queue of some kind)
-
-				if (httpcode == 200)
-					botMessages.push(text);
-				else
-					botMessages.push(statustext);
-			},
-			function (errorcode, errormessage) {
-				//...
-			}, 5000);
-
-		if (botMessages.messagesToProcess) {
-			YourGameLogic.process(botMessages.get());
-			botMessages.clear();
-		}
-
-*/
-
 function KibotoBotMessages() {
 	// store responses in global state because
 	// callback can't access anything in KibotoGame
@@ -71,7 +29,8 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 	this.session_id = session_id;
 	this.player_id = player_id;
 
-	// a session should already exist, so might as well use it
+	// a session and player id should already exist, so might as well use them
+	// the game id can be made up. either the name of the game, or a guid
 	this.session_key = game_id + ':' + session_id + ':' + player_id;
 	this.responses = [];
 

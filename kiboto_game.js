@@ -52,6 +52,8 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 					console.log ("error: couldn't start session:");
 					console.log ("status: " + xhr.status.toString());
 					onsole.log ("message: " + xhr.statusText);
+					// note if this doesn't work. just add a function
+					// in the object's scope that handles it and use it here
 					this.session_connected = false;
 					this.session_error = true;
 				} else {

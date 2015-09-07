@@ -15,10 +15,10 @@ or use your own.
 Make sure to have a message queue ready to be able to
 extract the messages out of the callback context
 
-## Usage Example
+## Javascript SDK Usage Example
 
 ```javascript
-//...
+// import from kiboto_game.js
 
 // initialize the message and game context
 botMessages = new KibotoBotMessages();
@@ -27,6 +27,13 @@ game = new KibotoGame(hostname, port, 123, 000, "bob");
 // register your session with the kiboto server before
 // starting to send events
 game.init_session();
+
+if (!game.session_connected) {
+	if (game.session_error) {
+		// try again?
+		// display a loading screen in the mean time
+	}
+}
 
 //...
 

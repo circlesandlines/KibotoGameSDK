@@ -34,6 +34,7 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 	this.session_key = game_id + ':' + session_id + ':' + player_id;
 	this.responses = [];
 
+	this.session_connected = false;
 	this.session_error = false;
 
 	this.init_session = function() {
@@ -51,8 +52,10 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 					console.log ("error: couldn't start session:");
 					console.log ("status: " + xhr.status.toString());
 					onsole.log ("message: " + xhr.statusText);
+					this.session_connected = false;
 					this.session_error = true;
 				} else {
+					this.session_connected = true;
 					this.session_error = false;
 				}
 			}

@@ -34,10 +34,7 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 	this.session_key = game_id + ':' + session_id + ':' + player_id;
 	this.responses = [];
 
-	this.session_connected = false;
-	this.session_error = false;
-
-	this.init_session = function() {
+	this.init_session = function(callback, errorCallback) {
 		// initializes the session
 		url = this.host + ':' + this.port + '/session?' + \
 				'game_id=' + game_id + '&' + \
@@ -49,16 +46,9 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 		xhr.onload = function (err) {
 			if (xhr.readyState == 4) {
 				if (xhr.status != 200) {
-					console.log ("error: couldn't start session:");
-					console.log ("status: " + xhr.status.toString());
-					onsole.log ("message: " + xhr.statusText);
-					// note if this doesn't work. just add a function
-					// in the object's scope that handles it and use it here
-					this.session_connected = false;
-					this.session_error = true;
+					errorCallback(xhr.status, xhr.statusText);
 				} else {
-					this.session_connected = true;
-					this.session_error = false;
+					callback(xhr.status, xhr.statusText);
 				}
 			}
 		}

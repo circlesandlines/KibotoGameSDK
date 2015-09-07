@@ -26,14 +26,14 @@ game = new KibotoGame(hostname, port, 123, 000, "bob");
 
 // register your session with the kiboto server before
 // starting to send events
-game.init_session();
+game.init_session(function(httpCode, statusMessage) {
+		// on success
+	},
+	function (httpCode, statusMessage) {
+		// on error
+	});
 
-if (!game.session_connected) {
-	if (game.session_error) {
-		// try again?
-		// display a loading screen in the mean time
-	}
-}
+// display loading screen in the mean time
 
 //...
 

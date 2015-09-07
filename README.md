@@ -21,6 +21,8 @@ extract the messages out of the callback context
 // import from kiboto_game.js
 
 // initialize the message and game context
+// kiboto supplies a message queue, but its optional
+// you can use your own!
 var botMessages = new KibotoBotMessages();
 var game = new KibotoGame(hostname, port, 123, 000, "bob");
 

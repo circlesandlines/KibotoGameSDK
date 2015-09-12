@@ -2,6 +2,15 @@
 
 Connect your game to a Kiboto server and allow AI competitions without difficult hacks
 
+## Kiboto Server
+
+https://github.com/circlesandlines/Kiboto
+
+## TODO for 1.0 release
+- [x] complete interface
+- [ ] solidify edge-cases
+- [ ] formal documentation
+
 ## Integration
 
 You must embed this into your game client for the easiest approach

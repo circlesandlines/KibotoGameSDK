@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<script src="kiboto_game.js"></script>
+	</head>
+	<body>
+	</body>
+
+	<script text="javascript">
+		/*
+			this will barely be a game.
+			just something to demonstrate cilent usage
+		*/
+
+		var Game = {};
+
+		Game.botMessages = new KibotoBotMessages();
+		Game.ai_session = new KibotoGame('http://localhost', 9090, "sample_game", "1", "P1");
+		// note: P1 player name will actually be set by the client at run-time
+		// this is just a hard coded example
+
+		Game.process = function() {
+			// process previous loop's messages if there are any
+			if (Game.botMessages.messagesToProcess) {
+				console.log(JSON.stringify(Game.botMessages.get()));
+				Game.botMessages.clear();
+			}
+
+			// stuff happens, state changes..
+
+			// event gets triggered
+			var e = {
+				'state': Math.random()
+			};
+
+			console.log(JSON.stringify(e));
+
+			//fire off to kiboto to notify this client's bot
+			Game.ai_session.event(e, function (httpcode, text, statustext) {
+
+				// you can use the kiboto message queue,
+				// or spin your own
+				// or modify game state right here (although
+				// I advise using a message queue of some kind)
+
+				if (httpcode == 200)
+				    Game.botMessages.push(text);
+				else
+				    Game.botMessages.push(statustext);
+			    },
+			    function (errorcode, errormessage) {
+				//don't do anything...
+				console.log(errormessage);
+			    }, 5000);
+		}
+
+		Game.draw = function() {
+			// only for demonstration purposes
+			// doesn't really do anything :P
+		}
+
+		Game.run = function () {
+			console.log('initialize game session for this client');
+
+			return function() {
+				console.log('is this actually run?');
+				Game.process();
+				Game.draw();
+			}
+		}
+
+		Game.ai_session.init_session(function(httpCode, statusMessage) {
+				// on success, start the game loop
+				setInterval(Game.run, 500);
+			    },
+			    function (httpCode, statusMessage) {
+				// on error
+				alert("something bad happened: " + statusMessage);
+			    });
+
+	</script>
+
+</html>

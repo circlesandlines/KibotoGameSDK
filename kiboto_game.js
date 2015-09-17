@@ -32,17 +32,18 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 	// a session and player id should already exist, so might as well use them
 	// the game id can be made up. either the name of the game, or a guid
 	this.session_key = game_id + ':' + session_id + ':' + player_id;
-	this.responses = [];
 
 	this.init_session = function(callback, errorCallback) {
 		// initializes the session
-		url = this.host + ':' + this.port + '/session?' + \
-				'game_id=' + game_id + '&' + \
-				'session_id=' + session_id + '&' + \
-				'player_id=' + player_id;
+		var url = this.hostname + ':' + this.port + '/session?'
+				+ 'game_id=' + game_id + '&'
+				+ 'session_id=' + session_id + '&'
+				+ 'player_id=' + player_id;
+
+		console.log(url);
 
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "/event", true);
+		xhr.open("GET", url, true);
 		xhr.onload = function (err) {
 			if (xhr.readyState == 4) {
 				if (xhr.status != 200) {
@@ -52,6 +53,7 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 				}
 			}
 		}
+		xhr.send();
 	};
 
 	this.event = function(data, callback, errorCallback, timeout) {

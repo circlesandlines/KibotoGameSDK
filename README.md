@@ -6,11 +6,6 @@ Connect your game to a Kiboto server and allow AI competitions without difficult
 
 https://github.com/circlesandlines/Kiboto
 
-## TODO for 1.0 release
-- [x] complete interface
-- [ ] solidify edge-cases
-- [ ] formal documentation
-
 ## Integration
 
 You must embed this into your game client for the easiest approach
@@ -73,3 +68,17 @@ game.event({...}, function (httpcode, text, statustext) {
 		//...
 	}, 5000);
 ```
+
+## To Run Sample "Game"
+
+- install node http server
+```bash
+npm install http-server -p
+```
+- start local kiboto server
+- run node server in the root directory
+```bash
+http-server ./
+```
+- start the sample bot in the kiboto bot sdk
+- watch it go !

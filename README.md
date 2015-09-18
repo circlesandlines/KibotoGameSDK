@@ -81,4 +81,4 @@ npm install http-server -g
 http-server ./
 ```
 - start the sample bot in the kiboto bot sdk
-- watch it go !
+- watch the console output :)

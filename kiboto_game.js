@@ -56,7 +56,7 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 		xhr.send();
 	};
 
-	this.event = function(data, callback, errorCallback, timeout) {
+	this.event = function(data, callback, errorCallback, timeoutMS) {
 		// send an event to kiboto server with
 		// what ever data the game developer wants.
 		// should represent state changes for the current player
@@ -65,7 +65,8 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 		// specifies. they can do whatever they want in there
 
 		var xhr = new XMLHttpRequest();
-		xhr.open("POST", "/event", true);
+		var url = this.hostname + ':' + this.port + '/event'
+		xhr.open("POST", url, true);
 
 		// handle success
 		if (callback == null) {
@@ -92,9 +93,14 @@ function KibotoGame(hostname, port, game_id, session_id, player_id) {
 		}
 
 		// handle timeouts?
-
 		xhr.timeout = timeoutMS;
-		xhr.send(data);
+
+		message = {
+			'session_key': this.session_key,
+			'message': data
+		}
+
+		xhr.send(JSON.stringify(message));
  	};
 }
 

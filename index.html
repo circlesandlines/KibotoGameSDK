@@ -11,66 +11,65 @@
 			just something to demonstrate cilent usage
 		*/
 
-		var Game = {};
+		function Game(botMessages, ai_session) {
+			var botMessages = botMessages;
+			var ai_session = ai_session;
+			this.process = function() {
+				// process previous loop's messages if there are any
+				if (botMessages.messagesToProcess) {
+					console.log(JSON.stringify(botMessages.get()));
+					window.botMessages.clear();
+				}
 
-		Game.botMessages = new KibotoBotMessages();
-		Game.ai_session = new KibotoGame('http://localhost', 9090, "sample_game", "1", "P1");
-		// note: P1 player name will actually be set by the client at run-time
-		// this is just a hard coded example
+				// stuff happens, state changes..
 
-		Game.process = function() {
-			// process previous loop's messages if there are any
-			if (Game.botMessages.messagesToProcess) {
-				console.log(JSON.stringify(Game.botMessages.get()));
-				Game.botMessages.clear();
-			}
+				// event gets triggered
+				var e = {
+					'state': Math.random()
+				};
 
-			// stuff happens, state changes..
+				console.log(JSON.stringify(e));
 
-			// event gets triggered
-			var e = {
-				'state': Math.random()
+				//fire off to kiboto to notify this client's bot
+				ai_session.event(e, function (httpcode, text, statustext) {
+
+					// you can use the kiboto message queue,
+					// or spin your own
+					// or modify game state right here (although
+					// I advise using a message queue of some kind)
+
+					if (httpcode == 200)
+					    window.botMessages.push(text);
+					else
+					    window.botMessages.push(statustext);
+				    },
+				    function (errorcode, errormessage) {
+					//don't do anything...
+					console.log(errormessage);
+				    }, 5000);
 			};
 
-			console.log(JSON.stringify(e));
+			this.draw = function() {
+				// only for demonstration purposes
+				// doesn't really do anything :P
+			};
 
-			//fire off to kiboto to notify this client's bot
-			Game.ai_session.event(e, function (httpcode, text, statustext) {
 
-				// you can use the kiboto message queue,
-				// or spin your own
-				// or modify game state right here (although
-				// I advise using a message queue of some kind)
-
-				if (httpcode == 200)
-				    Game.botMessages.push(text);
-				else
-				    Game.botMessages.push(statustext);
-			    },
-			    function (errorcode, errormessage) {
-				//don't do anything...
-				console.log(errormessage);
-			    }, 5000);
+			this.run = function (me) {
+				me.process();
+				me.draw();
+			};
 		}
 
-		Game.draw = function() {
-			// only for demonstration purposes
-			// doesn't really do anything :P
-		}
+		window.botMessages = new KibotoBotMessages();
+		window.ai_session = new KibotoGame('http://localhost', 9090, "sample_game", "1", "P1");
+		// note: P1 player name will actually be set by the client at run-time
+		// this is just a hard coded example
+		game = new Game(window.botMessages, window.ai_session);
 
-		Game.run = function () {
-			console.log('initialize game session for this client');
-
-			return function() {
-				console.log('is this actually run?');
-				Game.process();
-				Game.draw();
-			}
-		}
-
-		Game.ai_session.init_session(function(httpCode, statusMessage) {
+		window.ai_session.init_session(function(httpCode, statusMessage) {
 				// on success, start the game loop
-				setInterval(Game.run, 500);
+				setInterval(game.run, 500, game);
 			    },
 			    function (httpCode, statusMessage) {
 				// on error

@@ -73,7 +73,7 @@ game.event({...}, function (httpcode, text, statustext) {
 
 - install node http server
 ```bash
-npm install http-server -p
+npm install http-server -g
 ```
 - start local kiboto server
 - run node server in the root directory
